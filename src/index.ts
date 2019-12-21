@@ -1,4 +1,4 @@
-import { createWriteStream } from 'fs'
+import { createWriteStream, existsSync, lstatSync, fstatSync } from 'fs'
 import axios from 'axios';
 import * as puppeteer from 'puppeteer';
 
@@ -116,7 +116,12 @@ async function downloadImage(
     image: ProbedImageObject,
     downloadLocation: string
 ): Promise<string> {
-    const filename: string = image.title + '.' + image.probe.type;
+
+    const formattedTitle = encodeURIComponent(image.title.substring(0, 20))
+
+    console.log(`Downloading ${formattedTitle}`);
+
+    const filename: string = formattedTitle + '.' + image.probe.type;
     const path: string = join(downloadLocation, filename);
     const writer = createWriteStream(path);
     const response = await axios({
@@ -138,6 +143,21 @@ async function main(
     output: string,
 ): Promise<void> {
     console.log(`Query: ${query}, output: ${output}`)
+    const outputPath: string = join(__dirname, output)
+
+    if (
+        !query || !output
+    ) {
+        throw new Error('Input parameters missing')
+    }
+
+    if (
+        !existsSync(outputPath)
+        || !lstatSync(outputPath).isDirectory()
+    ) {
+        throw new Error('Output directory cannot be found')
+    }
+
     const images = await scrape(query);
 
     await Promise.all(
@@ -153,3 +173,4 @@ main(
     yargs.argv.query as string,
     yargs.argv.output as string,
 );
+
