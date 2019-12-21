@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "newLine": "LF",
+      "outDir": "./dist/",
+      "target": "es5",
+      "sourceMap": true,
+      "baseUrl": ".",
+      "paths": {
+        "probe-image-size": ["src/interfaces"]
+      },
+      "declaration": true,
+      "jsx": "preserve",
+      "lib": [
+        "es2017",
+        "dom"
+      ],
+      "strict": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true
+    },
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      ".git",
+      "node_modules"
+    ]
+  }
